@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "client",
+    "slug": "gate-pass",
+    "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/notification-icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+            "./local/assets/notification-sound.wav",
+            "./local/assets/notification-sound-other.wav"
+          ]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0ca8dff4-7b6a-423f-a69e-ac3cf3a9ca15"
+      }
+    },
+    "owner": "shivam11111"
+  }
+}
