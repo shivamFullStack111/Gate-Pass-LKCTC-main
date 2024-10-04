@@ -5,7 +5,7 @@ export const bgSlate900 = "#1E293B";
 export const collegeName = "Lyallpur Khalsa College Technical Compus";
 
 export const isadmin = true;
-export const dbUrl = "http://172.16.2.121:3000";
+export const dbUrl = "http://172.16.2.127:3000";
 
 // utils.js
 export const formatDate = (dateString) => {

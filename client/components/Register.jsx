@@ -18,7 +18,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated, setUser } from "../store/slices/userSlice";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -26,9 +26,17 @@ import Constants from "expo-constants";
 
 
 const emojisWithIcons = [
-  { title: "It / Block D", icon: "emoticon-happy-outline" },
-  { title: "Engineering / Block B", icon: "emoticon-cool-outline" },
-  { title: "Pharmacy / Block A", icon: "emoticon-cool-outline" },
+  { title: "IT",  },
+  { title: "Management",},
+  { title: "Pharmacy",  },
+  { title: "CE",  },
+  { title: "ECE",  },
+  { title: "HM",  },
+  { title: "MLS",  },
+  { title: "CSE",  },
+  { title: "AS",  },
+  { title: "ME",  },
+ { title:''}
 ];
 
 const Register = () => {
@@ -70,6 +78,7 @@ const Register = () => {
       });
 
       console.log(res.data);
+      alert(res.data?.message)
       if (res?.data?.success) {
         await AsyncStorage.setItem("token", res?.data?.token);
         dispatch(setUser(res?.data?.user));
@@ -87,6 +96,8 @@ const Register = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
+      
+     <ScrollView contentContainerStyle={{flexGrow:1}}>
       {/* modal for select role */}
       {roleSelectOpen && (
         <View
@@ -382,7 +393,7 @@ const Register = () => {
               shadowColor: active === 3 ? "blue" : "black",
             }}
           >
-            <SelectDropdown
+           <SelectDropdown
               data={emojisWithIcons}
               onSelect={(selectedItem, index) => {
                 setDepartment(selectedItem.title);
@@ -478,6 +489,7 @@ const Register = () => {
           </Text>
         </View>
       </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -511,6 +523,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 8,
+    // paddingBottom:30 
   },
   dropdownItemTxtStyle: {
     flex: 1,

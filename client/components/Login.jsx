@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Login = () => {
   const [active, setActive] = useState(-1);
@@ -87,12 +88,11 @@ const Login = () => {
       });
   
       console.log(res.data);
+      alert(res.data?.message)
       if (res?.data?.success) {
         await AsyncStorage.setItem("token", res?.data?.token);
         dispatch(setUser(res?.data?.user));
         dispatch(setIsAuthenticated(true));
-      } else {
-        alert("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.log(error.message, '...........');
@@ -112,7 +112,8 @@ const Login = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+     <ScrollView contentContainerStyle={{flexGrow:1}}>
+     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={{ width: "90%" }}>
           <Image
             style={{ width: "100%", height: "35%", resizeMode: "contain" }}
@@ -205,6 +206,7 @@ const Login = () => {
           </Text>
         </View>
       </View>
+     </ScrollView>
     </KeyboardAvoidingView>
   );
 };

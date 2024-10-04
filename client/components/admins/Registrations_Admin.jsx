@@ -25,6 +25,7 @@ const Registrations_Admin = () => {
   const handleVerifyUser = async (userid) => {
     if (isRequesting) return;
     setisRequesting(true);
+    
     try {
       const token = await AsyncStorage.getItem("token");
       if (!token) {
@@ -42,6 +43,35 @@ const Registrations_Admin = () => {
       if (res?.data?.success) {
         setisRequesting(false);
         dispatch(updateAllUsers({ userid, data: { isVarified: true } }));
+      }
+      setisRequesting(false);
+    } catch (error) {
+      console.log(error.message);
+      setisRequesting(false);
+    }
+  };
+  const handleCancelUserRegisterRequest = async (userid) => {
+    if (isRequesting) return;
+    setisRequesting(true);
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        setisRequesting(false);
+        alert("token not found login to continue");
+      }
+      const res = await axios.post(
+        dbUrl + "/cancel-user-registration",
+        { userid },
+        { headers: { Authorization: token } }
+      );
+
+      alert(res.data?.message);
+
+      if (res?.data?.success) {
+        setisRequesting(false);
+        dispatch(updateAllUsers({ userid, data: { isVarified: false } }));
+        dispatch(removeSingleUser(userid))
       }
       setisRequesting(false);
     } catch (error) {
@@ -68,7 +98,7 @@ const Registrations_Admin = () => {
 
           <View style={{ zIndex: 40, marginTop: 0, marginBottom: 70 }}>
             {allUsers?.map((user, i) => (
-              <Card handleVerifyUser={handleVerifyUser} user={user} key={i} />
+              <Card handleVerifyUser={handleVerifyUser} handleCancelUserRegisterRequest={handleCancelUserRegisterRequest} user={user} key={i} />
             ))}
           </View>
         </ScrollView>
@@ -112,7 +142,7 @@ const Registrations_Admin = () => {
 
 export default Registrations_Admin;
 
-const Card = ({ user, handleVerifyUser }) => {
+const Card = ({ user, handleVerifyUser,handleCancelUserRegisterRequest }) => {
   const [deleteOpen, setdeleteOpen] = useState(false);
   const dispatch = useDispatch();
   const [isRequesting, setisRequesting] = useState(false);
@@ -188,7 +218,10 @@ const Card = ({ user, handleVerifyUser }) => {
                 marginTop: 15,
               }}
             >
-              <View
+              <TouchableOpacity
+              onPress={()=>{
+               handleCancelUserRegisterRequest(user?._id) 
+              }}
                 style={{
                   height: 40,
                   width: "47%",
@@ -206,7 +239,7 @@ const Card = ({ user, handleVerifyUser }) => {
                     "Cancel"
                   )}
                 </Text>
-              </View>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleVerifyUser(user?._id)}
                 style={{

@@ -1,6 +1,6 @@
 import { View, Text, KeyboardAvoidingView, Platform, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { dbUrl, secondaryClor } from '../utils'
+import { dbUrl, formatDate, secondaryClor } from '../utils'
 import {formatTime} from '../utils'
 import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -88,6 +88,10 @@ const Card = () => {
          <View style={{flexDirection:'row',}}>
             <Text style={{fontSize:18,fontWeight:'600'}}>Return time:{" "}</Text>
             <Text style={{fontSize:17,fontWeight:'500' ,color:'gray'}}>{formatTime(Date.now())}</Text>
+         </View>
+         <View style={{flexDirection:'row',}}>
+            <Text style={{fontSize:18,fontWeight:'600'}}>Date:{" "}</Text>
+            <Text style={{fontSize:17,fontWeight:'500' ,color:'gray'}}>{formatDate(Date.now())}</Text>
          </View>
         </View>
     )

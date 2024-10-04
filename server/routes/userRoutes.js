@@ -23,7 +23,9 @@ router.post("/register", async (req, res) => {
       email: { $regex: emal, $options: "i" },
     });
     if (user) {
+      console.log('exist user is........',user)
       return res.send({ success: false, message: "Email already exists" });
+
     }
     // create new user
     const salt = await bcrypt.genSalt(10);
@@ -72,7 +74,7 @@ router.post("/login", async (req, res) => {
       email: { $regex: emal, $options: "i" },
     });
     if (!user) {
-      return res.send({ success: false, message: "Users not found" });
+      return res.send({ success: false, message: "you are not registered" });
     }
     // check password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -106,7 +108,7 @@ router.get("/check-authentication", isAuthenticate, async (req, res) => {
 
     const user = await Users.findOne({ email: req?.user?.email });
 
-    if (!user) return res.send({ success: false, message: "User not found" });
+    if (!user) return res.send({ success: false, message: "you are not registered" });
 
     return res.send({ success: true, message: "user is authenticated", user });
   } catch (error) {
@@ -155,6 +157,28 @@ router.post("/verify-user", isAuthenticate, async (req, res) => {
       success: true,
       message: "user verified successfully ",
       user,
+    });
+  } catch (error) {
+    return res.send({ success: false, message: error.message });
+  }
+});
+router.post("/cancel-user-registration", isAuthenticate, async (req, res) => {
+  console.log('cancel request')
+  try {
+    if (req?.user?.role !== "director") {
+      return res.send({
+        success: false,
+        message: "you are not eligible to verify user",
+      });
+    }
+
+    await Users.findOneAndDelete({_id:req.body?.userid});
+
+   
+
+    return res.send({
+      success: true,
+      message: "user cancel verification successfully ",
     });
   } catch (error) {
     return res.send({ success: false, message: error.message });
