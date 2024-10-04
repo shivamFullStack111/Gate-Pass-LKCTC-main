@@ -206,6 +206,7 @@ const Register = () => {
                 Head Of Department (HOD)
               </Text>
             </TouchableOpacity>
+            
             <TouchableOpacity
               onPress={() => setrole("keeper")}
               style={{
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
   dropdownMenuStyle: {
     backgroundColor: "#E9ECEF",
     borderRadius: 8,
-    top:'40%'
+    top:'4 0%'
   },
   dropdownItemStyle: {
     width: "100%",
