@@ -40,8 +40,7 @@ const Profile = () => {
           height,
         }}
       >
-        {user?.role == "director" || user?.role == "hod" ? (
-          <View
+        <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -98,9 +97,6 @@ const Profile = () => {
               </Text>
             </View>
           </View>
-        ) : (
-          <View></View>
-        )}
         <ScrollView style={{ flex: 1, zIndex: 40 }}>
           <Text
             style={{
@@ -138,7 +134,7 @@ const Profile = () => {
 
 
 
-      {user?.role!=='keeper'?  <View> 
+      {/* {user?.role!=='keeper'?  <View> 
           {user?.role !== "director" && user?.role !== "hod" ? (
             <View>
               <TouchableOpacity
@@ -185,7 +181,7 @@ const Profile = () => {
           )}
           </View>
           :<View style={{height:50}}></View>
-          }
+          } */}
 
 
 
