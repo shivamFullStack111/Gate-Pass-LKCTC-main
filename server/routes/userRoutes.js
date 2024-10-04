@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     // validation
+    console.log('regitser post call')
     const { name, email, password, department, role, notificationToken } =
       req.body;
     console.log(req.body);
