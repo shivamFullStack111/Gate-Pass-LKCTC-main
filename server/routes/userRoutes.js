@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     // validation
-    console.log('regitser post call')
+    console.log("regitser post call");
     const { name, email, password, department, role, notificationToken } =
       req.body;
     console.log(req.body);
@@ -24,9 +24,8 @@ router.post("/register", async (req, res) => {
       email: { $regex: emal, $options: "i" },
     });
     if (user) {
-      console.log('exist user is........',user)
+      console.log("exist user is........", user);
       return res.send({ success: false, message: "Email already exists" });
-
     }
     // create new user
     const salt = await bcrypt.genSalt(10);
@@ -37,15 +36,15 @@ router.post("/register", async (req, res) => {
       email: emal,
       password: hashedPass,
       department,
-      role:email.toLowerCase()=='director@gmail.com'?'director':role,
+      role: email.toLowerCase() == "director@gmail.com" ? "director" : role,
       notificationToken,
     });
 
     // save user to database
 
-    if(newUser.email.toLowerCase()=='director@gmail.com'){
-      newUser.isVarified=true
-      newUser.role=='director'
+    if (newUser.email.toLowerCase() == "director@gmail.com") {
+      newUser.isVarified = true;
+      newUser.role == "director";
     }
 
     await newUser.save();
@@ -69,7 +68,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    console.log('first')
+    console.log("first");
     const { email, password, notificationToken } = req.body;
     if (!email || !password) {
       return res.send({ success: false, message: "Please enter all fields" });
@@ -115,7 +114,8 @@ router.get("/check-authentication", isAuthenticate, async (req, res) => {
 
     const user = await Users.findOne({ email: req?.user?.email });
 
-    if (!user) return res.send({ success: false, message: "you are not registered" });
+    if (!user)
+      return res.send({ success: false, message: "you are not registered" });
 
     return res.send({ success: true, message: "user is authenticated", user });
   } catch (error) {
@@ -169,8 +169,9 @@ router.post("/verify-user", isAuthenticate, async (req, res) => {
     return res.send({ success: false, message: error.message });
   }
 });
+
 router.post("/cancel-user-registration", isAuthenticate, async (req, res) => {
-  console.log('cancel request')
+  console.log("cancel request");
   try {
     if (req?.user?.role !== "director") {
       return res.send({
@@ -179,9 +180,7 @@ router.post("/cancel-user-registration", isAuthenticate, async (req, res) => {
       });
     }
 
-    await Users.findOneAndDelete({_id:req.body?.userid});
-
-   
+    await Users.findOneAndDelete({ _id: req.body?.userid });
 
     return res.send({
       success: true,
@@ -205,6 +204,32 @@ router.post("/delete-user", isAuthenticate, async (req, res) => {
     return res.send({ success: true, message: "user deleted successfully" });
   } catch (error) {
     console.log(error.message);
+    return res.send({ success: false, message: error.message });
+  }
+});
+
+router.post("/update-user", isAuthenticate, async (req, res) => {
+  try {
+    const { userData } = req?.body;
+
+    if (!userData?.password || !userData?.name) {
+      return res.send({
+        success: false,
+        message: "name and password is required",
+      });
+    }
+
+    let user = await Users.findOne({ email: req?.user?.email });
+
+    const hashPass = await bcrypt.hash(userData?.password, 10);
+    console.log(user);
+    user.name = userData?.name;
+    user.password = hashPass;
+
+    await user.save();
+
+    return res.send({ success: true, message: "update successfully!", user });
+  } catch (error) {
     return res.send({ success: false, message: error.message });
   }
 });
