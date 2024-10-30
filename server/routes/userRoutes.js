@@ -13,6 +13,19 @@ router.post("/register", async (req, res) => {
     console.log("regitser post call");
     const { name, email, password, department, role, notificationToken } =
       req.body;
+
+    if (
+      !email?.includes("@kclimt.com") &&
+      !email?.includes("@lkctc.edu.in") &&
+      !email?.includes("@lkcengg.edu.in") &&
+      !email?.includes("@gmail.com")
+    ) {
+      return res.send({
+        success: false,
+        message:
+          "your email must include @kclimt.com or @lkctc.edu.in or @lkcengg.edu.in or @gmail.com",
+      });
+    }
     console.log(req.body);
     if (!name || !email || !password || !department || !role) {
       return res.send({ success: false, message: "Please enter all fields" });
